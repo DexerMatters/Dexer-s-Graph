@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8" />
+	</head>
+	<body onLoad="runner()" style="height:100%;" bgcolor="antiquewhite">
+		<div id="hd">sec</div>
+		<img id="hh" src="src/happy.png" style="width: 80px;height: 80px;margin-top: 5%;"></img>
+		<script>
+		</script>
+		<script src="Rate.js"></script>
+		<script src="HashMap.js"></script>
+		<script src="Loop.js"></script>
+		<script src="Animate.js"></script>
+		<script>
+		function runner(){
+			var text=document.getElementById("hh");
+			var an=new dex_SimpleAnimation();
+			an.addMoveX(null,200,800,null,new dex_Rate(1,2,3,3,3,3,-3,-3))
+			an.startAt("hh");
+		}
+		</script>
+	</body>
+</html>
