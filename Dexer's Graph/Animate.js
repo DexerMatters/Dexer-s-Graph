@@ -13,13 +13,13 @@ function dex_SimpleAnimation(){
 		durings.push((begin===null?0:begin)+during);
 		froms.push(from);
 		begins.push(begin===null?0:begin);
-		rates.push(rate===null?new dex_Rate(0):rate);
+		rates.push(rate===null?new dex_Rate(1):rate);
 	};
 	var finish_=function(func){
 		t_enable=false;
 		time=-1;
-		if(resetable) ele.style.cssText=orginalStyle;
 		instance.onFinish();
+		if(resetable) ele.style.cssText=orginalStyle;
 	}
 	this.onFinish=function(func){
 		onfinish=func;
@@ -27,6 +27,10 @@ function dex_SimpleAnimation(){
 	this.onRun=function(func){
 		onrun=func;
 	};
+	this.reset=function(){
+		finish_();
+		ele.style.cssText=orginalStyle;
+	}
 	this.restart=function(){
 		if(time==-1) return;
 		finish_();
@@ -53,12 +57,12 @@ function dex_SimpleAnimation(){
 							console.log(rates[i].getTranslatedValues()[j]);
 							switch(styles[i]){
 								case "opacity":
-									eval("ele.style."+styles[i]+"=(parseFloat(ele.style."+styles[i]+")+lengths[i]/durings[i]);");
+									eval("ele.style."+styles[i]+"=(parseFloat(ele.style."+styles[i]+")+"+rates[i].getTranslatedValues()[j]*(lengths[i]/durings[i])+");");
 									break;
 								case "rotate":
 									ele.style.transform='rotate('+(
 										parseFloat((ele.style.transform).replace(/[^\d\.]/g,"")
-										)+lengths[i]/durings[i])+'deg)';
+										)+rates[i].getTranslatedValues()[j]*(lengths[i]/durings[i]))+'deg)';
 									break;
 								default:
 									eval("ele.style."+styles[i]+"=(parseFloat(ele.style."+styles[i]+")+"+rates[i].getTranslatedValues()[j]*(lengths[i]/durings[i])+")+\"px\";");
@@ -67,7 +71,8 @@ function dex_SimpleAnimation(){
 				}
 			};
 			if(time>=(durings.length==1?durings[0]:Math.max.apply(null,durings))){
-				instance.finish();
+				onfinish();
+				finish_();
 			}
 		
 	};
@@ -114,6 +119,7 @@ function dex_SimpleAnimation(){
 						eval("ele.style."+styles[i]+"=froms[i];")
 						break;
 					case "rotate":
+						ele.style.transformOrigin="center";
 						ele.style.transform='rotate('+froms[i]+'deg)';
 						break;
 					default:
@@ -128,10 +134,10 @@ function dex_SimpleAnimation(){
 						eval("ele.style."+styles[i]+"=ele.offsetHeight+\"px\";");
 						break;
 					case "marginLeft":
-						eval("ele.style."+styles[i]+"=ele.offsetLeft+\"px\";");
+						eval("ele.style."+styles[i]+"=ele.clientLeft+\"px\";");
 						break;
 					case "marginTop":
-						eval("ele.style."+styles[i]+"=ele.offsetTop+\"px\";");
+						eval("ele.style."+styles[i]+"=ele.clientTop+\"px\";");
 						break;
 				}
 		}
@@ -140,9 +146,10 @@ function dex_SimpleAnimation(){
 }
 function dex_Effect(id){
 	var ele=document.getElementById(id);
-	var an=new dex_SimpleAnimation(id);
-	this.makeVibrate=function(id,during){
-		var during_=during===null?500:during;
-		//an.addMoveX(null,)
+	var an=new dex_SimpleAnimation();
+	this.makeGlow=function(during){
+		var during_=during===null?200:during;
+		
+		an.startAt(id);
 	}
 }
