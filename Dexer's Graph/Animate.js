@@ -51,9 +51,38 @@ function dex_SimpleAnimation(){
 			onrun(time);
 			for(var i=0;i<styles.length;i++){
 				debug.innerText=time+"ms"+"   ";
+				if(time==begins[i]){
+					if(froms[i]!==null)
+						switch(styles[i]){
+							case "opacity":
+								eval("ele.style."+styles[i]+"=froms[i];")
+								break;
+							case "rotate":
+								ele.style.transformOrigin="center";
+								ele.style.transform='rotate('+froms[i]+'deg)';
+								break;
+							default:
+								eval("ele.style."+styles[i]+"=froms[i]+\"px\";")
+						}
+					else
+						switch(styles[i]){
+							case "width":
+								eval("ele.style."+styles[i]+"=ele.offsetWidth+\"px\";");
+								break;
+							case "height":
+								eval("ele.style."+styles[i]+"=ele.offsetHeight+\"px\";");
+								break;
+							case "marginLeft":
+								eval("ele.style."+styles[i]+"=ele.clientLeft+\"px\";");
+								break;
+							case "marginTop":
+								eval("ele.style."+styles[i]+"=ele.clientTop+\"px\";");
+								break;
+						}
+				}
 				if(time<durings[i]&&time>=begins[i]){
 					for(var j=0;j<rates[i].getCount();j++)
-						if(time>=durings[i]*(j/rates[i].getCount())&&time<durings[i]*((j+1)/rates[i].getCount())){
+						if(time>durings[i]*(j/rates[i].getCount())&&time-begins[i]<=durings[i]*((j+1)/rates[i].getCount())){
 							console.log(rates[i].getTranslatedValues()[j]);
 							switch(styles[i]){
 								case "opacity":
@@ -113,33 +142,7 @@ function dex_SimpleAnimation(){
 		ele=document.getElementById(id);
 		orginalStyle=ele.style.cssText;
 		for (var i = 0; i < styles.length; i++){
-			if(froms[i]!==null)
-				switch(styles[i]){
-					case "opacity":
-						eval("ele.style."+styles[i]+"=froms[i];")
-						break;
-					case "rotate":
-						ele.style.transformOrigin="center";
-						ele.style.transform='rotate('+froms[i]+'deg)';
-						break;
-					default:
-						eval("ele.style."+styles[i]+"=froms[i]+\"px\";")
-				}
-			else
-				switch(styles[i]){
-					case "width":
-						eval("ele.style."+styles[i]+"=ele.offsetWidth+\"px\";");
-						break;
-					case "height":
-						eval("ele.style."+styles[i]+"=ele.offsetHeight+\"px\";");
-						break;
-					case "marginLeft":
-						eval("ele.style."+styles[i]+"=ele.clientLeft+\"px\";");
-						break;
-					case "marginTop":
-						eval("ele.style."+styles[i]+"=ele.clientTop+\"px\";");
-						break;
-				}
+			
 		}
 		loop();
 	};
@@ -149,7 +152,10 @@ function dex_Effect(id){
 	var an=new dex_SimpleAnimation();
 	this.makeGlow=function(during){
 		var during_=during===null?200:during;
-		
+		//an.addFade(1,-1,50,0,null)
+		//an.addFade(0,2,50,50,null)
+		an.addMoveX(0,400,1000,0,new dex_Rate(1,2,3))
+		an.setReducible(false);
 		an.startAt(id);
 	}
 }
