@@ -89,7 +89,7 @@ function dex_Animation(){
 				}
 				if(time<durings[i]&&time>=begins[i]){
 					for(var j=0;j<rates[i].getCount();j++)
-						if(time>durings[i]*(j/rates[i].getCount())&&time-begins[i]<=durings[i]*((j+1)/rates[i].getCount())){
+						if(time>durings[i]*(j/rates[i].getCount())&&time<=durings[i]*((j+1)/rates[i].getCount())){
 							//console.log(rates[i].getTranslatedValues()[j]);
 							switch(styles[i]){
 								case "opacity":
@@ -154,7 +154,7 @@ function dex_Animation(){
 		loop();
 	};
 }
-function dex_AnimationList(list){
+/* function dex_AnimationList(list){
 	var ele;
 	this.startAt=function(id){
 		for (var i=0;i<list.length-1;i++){
@@ -167,7 +167,7 @@ function dex_AnimationList(list){
 	this.add=function(ani){
 		list.push(ani);
 	};
-}
+} */
 function dex_Effect(id){
 	var ele=document.getElementById(id);
 	var an=new dex_SimpleAnimation();
